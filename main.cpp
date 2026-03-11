@@ -6,22 +6,36 @@
  email for the microservice to then format and send to the users provided email.
  @purpose: Runs the microservice
 */
-#include <iostream>
-#include "request_reader.h"
+#include "httplib.h"
+#include "json.hpp"
 #include "file_reader.h"
 #include "email_service.h"
+#include <iostream>
+
+using json = nlohmann::json;
 
 int main() {
+    httplib::Server svr;
 
-    std::string requestFile = "requests/request.json";
+    svr.Post("/send-email", [](const httplib::Request& req, httplib::Response& res) {
+        try {
+            json j = json::parse(req.body);
+            std::string email = j["email"];
+            std::string file = j["file"];
 
-    Request req = readRequest(requestFile);
+            std::string message = readFile(file); // throws if empty
 
-    std::string message = readFile(req.file);
+            sendEmail(email, message);
 
-    sendEmail(req.email, message);
+            json response;
+            response["status"] = "complete";
+            res.set_content(response.dump(), "application/json");
+        } catch (const std::exception& e) {
+            res.status = 400;
+            res.set_content("{\"error\":\"" + std::string(e.what()) + "\"}", "application/json");
+        }
+    });
 
-    std::cout << "Notification sent to " << req.email << std::endl;
-
-    return 0;
+    std::cout << "Microservice running on http://localhost:8080\n";
+    svr.listen("localhost", 8080);
 }
