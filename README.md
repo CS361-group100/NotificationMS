@@ -22,7 +22,6 @@ This Microservice will require asking user for their email, then you have to sen
 
     return 0;
 
-Then run in cmd:
 Compile your microservice and run it first:
 
     g++ email_ms.cpp -o email_ms.exe -lws2_32
