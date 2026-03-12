@@ -10,12 +10,14 @@ This Microservice will require asking user for their email, then you have to sen
 4. Should say: Microservice running on http://localhost:8080
 5. Test it with an API test platform (recommended Postman but any should work)
 6. Enter the URL http://localhost:8080/send-email, and put in your JSON request, should look like this:
+
         {
         "fromEmail": "senders_email@gmail.com",
         "appPassword": "your_gmail_app_password",
         "toEmail": "users_email@gmail.com",
         "file": "path/to/text.txt"
         }
+        
 7. Should get a success message printed out and an email in the users inbox!
 
 # Python users:
