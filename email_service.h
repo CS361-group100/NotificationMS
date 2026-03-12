@@ -2,4 +2,7 @@
 
 #include <string>
 
-void sendEmail(std::string email, std::string message);
+void sendEmail(const std::string &fromEmail,
+               const std::string &appPassword,
+               const std::string &toEmail,
+               const std::string &message);

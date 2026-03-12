@@ -20,19 +20,32 @@ int main() {
     svr.Post("/send-email", [](const httplib::Request& req, httplib::Response& res) {
         try {
             json j = json::parse(req.body);
-            std::string email = j["email"];
-            std::string file = j["file"];
+
+            // Safely extract strings
+            std::string fromEmail = j.value("fromEmail", "");
+            std::string appPassword = j.value("appPassword", "");
+            std::string toEmail = j.value("toEmail", "");
+            std::string file = j.value("file", "");
+
+            // Check that none are empty
+            if (fromEmail.empty() || appPassword.empty() || toEmail.empty() || file.empty()) {
+                throw std::runtime_error("Missing required field(s) in JSON request");
+            }
 
             std::string message = readFile(file); // throws if empty
 
-            sendEmail(email, message);
+            // Send the email
+            sendEmail(fromEmail, appPassword, toEmail, message);
 
             json response;
             response["status"] = "complete";
             res.set_content(response.dump(), "application/json");
+
         } catch (const std::exception& e) {
             res.status = 400;
-            res.set_content("{\"error\":\"" + std::string(e.what()) + "\"}", "application/json");
+            json error;
+            error["error"] = e.what();
+            res.set_content(error.dump(), "application/json");
         }
     });
 
