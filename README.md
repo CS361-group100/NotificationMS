@@ -15,7 +15,7 @@ This Microservice will require asking user for their email, then you have to sen
         "fromEmail": "senders_email@gmail.com",
         "appPassword": "your_gmail_app_password",
         "toEmail": "users_email@gmail.com",
-        "file": "path/to/text.txt"
+        "body": "contents"
         }
         
 7. Should get a success message printed out and an email in the users inbox!
