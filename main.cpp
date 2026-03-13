@@ -32,8 +32,8 @@ int main() {
                 throw std::runtime_error("Missing required field(s) in JSON request");
             }
 
-            std::string message = readFile(file); // throws if empty
-
+            std::string message = j.value("body", "");
+         
             // Send the email
             sendEmail(fromEmail, appPassword, toEmail, message);
 
