@@ -25,17 +25,17 @@ int main() {
             std::string fromEmail = j.value("fromEmail", "");
             std::string appPassword = j.value("appPassword", "");
             std::string toEmail = j.value("toEmail", "");
-            std::string file = j.value("file", "");
+            std::string body = j.value("body", ""); 
 
             // Check that none are empty
-            if (fromEmail.empty() || appPassword.empty() || toEmail.empty() || file.empty()) {
+            if (fromEmail.empty() || appPassword.empty() || toEmail.empty() || body.empty()) {
                 throw std::runtime_error("Missing required field(s) in JSON request");
             }
 
             std::string message = j.value("body", "");
          
             // Send the email
-            sendEmail(fromEmail, appPassword, toEmail, message);
+            sendEmail(fromEmail, appPassword, toEmail, body);
 
             json response;
             response["status"] = "complete";
